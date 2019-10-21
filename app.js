@@ -17,43 +17,6 @@ app.get('/', function(req, res) {
     })
   })
 
-  app.get('/weather', function(req, res) {
-
-    forwardGeoCode(req.query.search,function(data){  
-    
-        if(data.message){
-            res.send({
-                primer: data
-            })
-        }
-        else{
-            forecastWeather(data.lat,data.lon,function(data){
-    
-                if(data.error){
-                    res.send({
-                        error: data
-                    })
-                }
-                else{
-
-                    res.send({
-                        Ciudad: req.query.search,
-                        Sumaryy: data.summary,
-                        Temperatura: data.temp,
-                        Probabilidad_de_lluvia: data.probabilidad
-                    })
-                }
-            })
-        }
-    })
-
-  })
-
-  app.get('*', function(req, res) {
-    res.send({
-      error: 'Ruta no valida'
-    })
-  })
 
 
 app.listen(port, function() {
@@ -61,75 +24,5 @@ app.listen(port, function() {
 })
   
 
-const forecastWeather = function(lat,lon,callback) {
-    const url = 'https://api.darksky.net/forecast/' + weather_token + '/'+ lat + ',' + lon + '?lang=es&units=si'
 
-    request({ url, json: true }, function(error, response) {
-      if (error) {
-        callback(error,undefined)
-      } else {
-          
-        const data = response.body
-
-        if( data.error ){
-            callback(data)
-        } else {
-            const info = {
-                summary: data.currently.summary,
-                temp: data.currently.temperature,
-                probabilidad: data.currently.precipProbability * 100,
-                days: []
-    
-            }
-    
-    
-            for (i in data.daily.data){
-                const aux = {
-                    auxSummary: data.daily.data[i].summary,
-                    auxProbabilidad: data.daily.data[i].precipProbability * 100,
-                    auxMax: data.daily.data[i].temperatureMax,
-                    auxMin: data.daily.data[i].temperatureMin
-                }
-                
-                info.days.push(aux)
-            }
-    
-            callback(info)
-        }
-        
-      }  
-    })
-  
-}
-
-const forwardGeoCode = function(place,callback) {
-    const url = 'https://api.mapbox.com/geocoding/v5/mapbox.places/' + place + '.json?access_token=' + mapbax_token
-
-    //console.log(url)
-
-    request({ url, json: true }, function(error, response) {
-      if (error) {
-        console.log(error)
-      } else {
-        const data = response.body
-
-        //console.log(data)
-        
-        
-        if ( data.message ) {
-          callback(data)
-        } else {
-          
-            const info = {
-                lon: data.features[0].geometry.coordinates[0],
-                lat: data.features[0].geometry.coordinates[1]
-            }
-
-            callback(info)
-
-        }
-      }  
-    })
-  
-}
 
