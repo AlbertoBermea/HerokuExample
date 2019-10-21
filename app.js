@@ -7,8 +7,8 @@ const app = express()
 
 
 app.get('/', function(req, res) {
-    res.send({
-      greeting: 'Hola Mundo!'
+    res.send({ 
+      greeting: process.env.MAPBOX_TOKEN
     })
   })
 
