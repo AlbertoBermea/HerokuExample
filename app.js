@@ -16,7 +16,7 @@ const weather_token = process.env.DARK_SKY_SECRET_KEY
 
 app.get('/', function(req, res) {
     res.send({ 
-      greeting: process.env.MAPBOX_TOKEN
+      greeting: mapbax_token
     })
   })
 
