@@ -57,7 +57,11 @@ app.listen(port, function() {
 })
   
 
-
+app.get('*', function(req, res) {
+    res.send({
+      error: 'Ruta no valida'
+    })
+  })
 
 
 const forecastWeather = function(lat,lon,callback) {
@@ -102,7 +106,7 @@ const forecastWeather = function(lat,lon,callback) {
 }
 
 const forwardGeoCode = function(place,callback) {
-    const url = 'https://api.mapbox.com/geocoding/v5/mapbox.places/' + place + '.json?access_token=' + map
+    const url = 'https://api.mapbox.com/geocoding/v5/mapbox.places/' + place + '.json?access_token=' + mapbax_token
 
     //console.log(url)
 
